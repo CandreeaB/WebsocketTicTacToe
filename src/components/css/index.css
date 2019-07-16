@@ -1,0 +1,114 @@
+html, body {
+    background: #23b0bb;
+    margin: 0;
+    height: 100%;
+    width: 100%;
+    text-align: center;
+}
+.container {
+    margin: 40px;
+    min-width: 500px;
+}
+.players-container span {
+    margin: 0 25px;
+    font-size: 40px;
+}
+.active-player {
+    color: white;
+}
+
+.menu {
+    padding: 20px 0;
+    color: white;
+    font-size: 16px;
+}
+
+.board {
+    align-items: center;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-start;
+    height: 380px;
+    width: 380px;
+    margin: auto;
+    padding-top: 20px;
+}
+.tile-container {
+    height: 100px;
+    width: 100px;
+    border: 4px solid black;
+    margin: 0 4px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+}
+.tile-container:hover {
+    border: 4px double black;
+}
+
+.tile-content {
+    font-size: 50px;
+}
+
+.winner-msg {
+    font-size: 40px;
+    color: aliceblue;
+}
+
+.reset-btn {
+    position: relative;
+    display: inline-block;
+    font-weight: bold;
+    padding: 6px 90px;
+    text-decoration: none;
+    border-left: solid 4px black;
+    border-right: solid 4px black;
+    color: black;
+    background: #86e1e8;
+    transition: .4s;
+    cursor: pointer;
+}
+.reset-btn:hover {
+    background: #0006066e;
+    color: #FFF;
+}
+
+/*spinner*/
+
+.lds-facebook {
+    display: inline-block;
+    position: relative;
+    width: 64px;
+    height: 64px;
+}
+.lds-facebook div {
+    display: inline-block;
+    position: absolute;
+    left: 6px;
+    width: 13px;
+    background: #fff;
+    animation: lds-facebook 1.2s cubic-bezier(0, 0.5, 0.5, 1) infinite;
+}
+.lds-facebook div:nth-child(1) {
+    left: 6px;
+    animation-delay: -0.24s;
+}
+.lds-facebook div:nth-child(2) {
+    left: 26px;
+    animation-delay: -0.12s;
+}
+.lds-facebook div:nth-child(3) {
+    left: 45px;
+    animation-delay: 0;
+}
+@keyframes lds-facebook {
+    0% {
+        top: 6px;
+        height: 51px;
+    }
+    50%, 100% {
+        top: 19px;
+        height: 26px;
+    }
+}
