@@ -32,6 +32,12 @@ export const playerConnected = (player) => {
   }
 };
 
+export const playerDisconnected = () => {
+  return {
+    type: PLAYER_DISCONNECTED
+  }
+};
+
 export const stoppedWaiting = () => {
   return {
     type: STOPPED_WAITING

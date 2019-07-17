@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { playerConnected, boardCleared, foundMatch, moveMade, stoppedWaiting } from '../actions/index';
+import { playerConnected, boardCleared, playerDisconnected, foundMatch, moveMade, stoppedWaiting } from '../actions/index';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import Menu from "./Menu.jsx";
@@ -13,6 +13,7 @@ import './css/index.css'
 const mapStateToProps = (state) => {
   return {
     player: state.GameReducer.player,
+    playerDisconnect:  state.GameReducer.playerDisconnect,
     turn: state.GameReducer.turn,
     isWaiting: state.GameReducer.isWaiting,
     matchFound: state.GameReducer.matchFound,
@@ -24,6 +25,7 @@ const mapDispatchToProps = (dispatch) => {
   return bindActionCreators({
     boardCleared,
     playerConnected,
+    playerDisconnected,
     foundMatch,
     moveMade,
     stoppedWaiting
@@ -39,27 +41,27 @@ class App extends Component {
     this.socket = null;
   }
 
-  clearBoard = (wait, dis, idle) => {
+  clearBoard = (wait, dis) => {
     this.props.boardCleared({
       isWaiting: wait,
       didPlayerDisconnect: dis,
-      isPlayerIdle: idle
     })
   };
 
   onReset = () => {
     this.socket.emit('reset');
-    this.clearBoard(false, false, false);
+    this.clearBoard(false, false);
   };
 
   handleClick = (board, loc, player) => {
-    let move = {
-      index: loc,
-      player: player,
-    };
-
-    this.props.moveMade(move);
-    this.socket.emit('boardMove', move);
+    if (this.props.turn === this.props.player && this.props.matchFound) {
+      let move = {
+        index: loc,
+        player: player,
+      };
+      this.props.moveMade(move);
+      this.socket.emit('boardMove', move);
+    }
   };
 
   connectSocket = () => {
@@ -86,16 +88,16 @@ class App extends Component {
     });
 
     this.socket.on('reset', () => {
-      this.clearBoard(false, false, false);
+      this.clearBoard(false, false);
     });
 
     this.socket.on('playerDisconnect', () => {
-      this.clearBoard(true, false, true, false);
+      this.clearBoard(true, true);
+      this.props.stoppedWaiting();
     });
   };
 
   checkConnect = () => {
-    console.log("checkConnect called. mutex is: ", this.connectionMutex);
     if (this.connectionMutex) {
       this.connectionMutex = false;
       this.connectSocket();
@@ -109,13 +111,16 @@ class App extends Component {
   }
 
   render(){
+    console.log(this.props);
     return (
         <div className='container'>
           <PlayerInfo
               player={this.props.player} />
           <Menu
               turn={this.props.turn}
-              player={this.props.player} />
+              player={this.props.player}
+              matchFound={this.props.matchFound}
+          />
           <Board
               handleClick={this.handleClick}
               player={this.props.player}
@@ -127,6 +132,7 @@ class App extends Component {
               matchFound={this.props.matchFound}
               player={this.props.player}
               winner={this.props.winner}
+              disconnect={this.props.playerDisconnect}
           />
         </div>
     );

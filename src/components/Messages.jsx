@@ -3,11 +3,6 @@ import NewGameBttn from './NewGameBttn.jsx';
 
 function GetSubMessage(props) {
   const matchFound   = props.matchFound;
-  const isPlayerIdle = props.isPlayerIdle;
-
-  if (isPlayerIdle) {
-    return null;
-  }
   
   if (matchFound) {
     return (
@@ -48,18 +43,37 @@ function WinnerMessage(props) {
   }
 }
 
+function DidDisconnect(props) {
+  const disconnect = props.disconnect;
+  if (disconnect) {
+    return (
+        <h2>
+          Your friend disconnected.
+        </h2>
+    )
+  } else {
+    return (
+        <h2>
+          Tic Tac Toe
+        </h2>
+    )
+  }
+}
+
 
 function GetMessage(props) {
   const isWaiting = props.isWaiting;
   const winner = props.winner;
   const onReset = props.onReset;
   const matchFound = props.matchFound;
+  const disconnect = props.disconnect;
 
   if (isWaiting) {
     return (
-      <aside className="content-msg">
+      <div className="content-msg">
         <GetSubMessage matchFound={matchFound} />
-      </aside>
+        <DidDisconnect disconnect={disconnect} />
+      </div>
     )
   } else if (winner) {
     return (
@@ -85,6 +99,7 @@ export default class Messages extends Component {
           matchFound={this.props.matchFound}
           onReset={this.props.onReset}
           winner={this.props.winner}
+          disconnect={this.props.disconnect}
         />
       </section>
     )

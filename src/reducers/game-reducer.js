@@ -8,7 +8,6 @@ const initialState = {
   ],
   isWaiting: true,
   matchFound: false,
-  isPlayerIdle: false,
   playerDisconnect: false,
   player: null,
   winner: null,
@@ -20,10 +19,10 @@ const updateObject = (oldObject, newValues) => {
 };
 
 const moveMade = (state, action) => {
-  let board  = state.gameBoard.map((value, index) => {
+  let board = state.gameBoard.map((value, index) => {
                 return (index === action.move.index) ? action.move.player : value;
               });
-  let turn   = utils.nextTurn(state.turn);
+  let turn = utils.nextTurn(state.turn);
   let winner = utils.getWinner(board, state.turn);
 
   if (!winner) {
@@ -45,8 +44,10 @@ const playerConnected = (state, action) => {
 };
 
 const playerDisconnected = (state, action) => {
+  console.log('disconnet');
   return updateObject(state, {
-    playerDisconnect: true
+    playerDisconnect: true,
+    matchFound: true,
   })
 };
 
@@ -65,12 +66,12 @@ const stoppedWaiting = (state, action) => {
 
 const boardCleared = (state, action) => {
   let op = action.options;
-  let player = (op.didPlayerDisconnect || op.isPlayerIdle) ? null : state.player;
+  console.log(op, 'op');
+  let player = op.didPlayerDisconnect ? null : state.player;
   return updateObject(initialState, {
     isWaiting: op.isWaiting,
     player: player,
     playerDisconnect: op.didPlayerDisconnect,
-    isPlayerIdle: op.isPlayerIdle,
   });
 };
 

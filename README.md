@@ -8,7 +8,7 @@ npm install dependencies.
 
 run npm start then node app.js
 
-navigate to http://localhost:3000
+navigate to http://localhost:3001 NOT http://localhost:3000!
 
 
 This project was bootstrapped with Create React App.
